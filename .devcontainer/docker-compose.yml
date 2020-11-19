@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  python:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args: 
+        VARIANT: "3"
+
+    volumes:
+      - ..:/workspace:delegated
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"  
+
+    # Connect the development container to the Agent container
+    network_mode: service:testproject-agent
+
+    # Secret environment variables are read from an .env file
+    # To successfully create the containers, an .env file should be placed at the
+    # root of the reporisoty, and contain the following values:
+    # TP_API_KEY=xxx
+    # TP_DEV_TOKEN=yyy
+    env_file:
+      - ../.env
+
+  # Also start a TestProject Agent container
+  testproject-agent:
+    image: testproject/agent:latest
+    restart: unless-stopped
+    depends_on:
+      - chrome
+    env_file:
+      - ../.env
+    environment:
+      TP_AGENT_TEMP: "true"
+      TP_SDK_PORT: "8686"
+      CHROME: "chrome:4444"
+    ports:
+    - "8585:8585"
+    - "8686:8686"
+    
+  # Chrome container for headless executions
+  chrome:
+    image: selenium/standalone-chrome
+    restart: unless-stopped
+    ports:
+    - "4444:4444"
