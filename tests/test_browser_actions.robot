@@ -41,8 +41,7 @@ Random Actions
 
 *** Keywords ***
 Init
-    ${options_chrome}=     Headless Chrome
-    Init Testproject Driver     chrome    timeout=5000     url=https://tp-solutions.herokuapp.com/code
+    Init Testproject Driver     firefox    timeout=5000     url=https://tp-solutions.herokuapp.com/code
 
 Close
     Close All Browsers
