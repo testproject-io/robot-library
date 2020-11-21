@@ -1,4 +1,4 @@
-# TestProject With Robot Framework
+# TestProject Library for the Robot Framework
 
 ## What is the Robot framework
 

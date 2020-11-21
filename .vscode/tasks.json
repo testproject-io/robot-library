@@ -1,0 +1,21 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "flake8",
+            "type": "shell",
+            "dependsOn": "build",
+            "command": "/usr/local/py-utils/bin/flake8",
+            "args": [
+                "TestProjectLibrary",
+                "--count",
+                "--select=E9,F63,F7,F82",
+                "--show-source",
+                "--statistics"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

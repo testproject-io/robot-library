@@ -33,8 +33,7 @@
         9000
     ],
     // Use 'postCreateCommand' to run commands after the container is created.
-    "postCreateCommand": "pip3 install importlib_metadata robotframework-seleniumlibrary testproject-python-sdk",
-    // && python3 setup.py install --user
+    // "postCreateCommand": "",
     // Comment out to connect as root instead.
     "remoteUser": "vscode",
     // Set environment variables
