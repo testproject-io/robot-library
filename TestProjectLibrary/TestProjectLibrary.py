@@ -89,15 +89,40 @@ class TestProjectLibrary:
             desired_capabilities.add_argument("--headless")
             browser = type
         if browser in self.FIREFOX_NAMES:
-            driver = webdriver.Firefox(desired_capabilities, dev_token, project_name, job_name, disabled_reports)
+            driver = webdriver.Firefox(
+                firefox_options=desired_capabilities,
+                token=dev_token,
+                projectname=project_name,
+                jobname=job_name,
+                disable_reports=disabled_reports)
         elif browser in self.CHROME_NAMES:
-            driver = webdriver.Chrome(desired_capabilities, dev_token, project_name, job_name, disabled_reports)
+            driver = webdriver.Chrome(
+                chrome_options=desired_capabilities,
+                token=dev_token,
+                projectname=project_name,
+                jobname=job_name,
+                disable_reports=disabled_reports)
         elif browser in self.IE_NAMES:
-            driver = webdriver.Ie(desired_capabilities, dev_token, project_name, job_name, disabled_reports)
+            driver = webdriver.Ie(
+                ie_options=desired_capabilities,
+                token=dev_token,
+                projectname=project_name,
+                jobname=job_name,
+                disable_reports=disabled_reports)
         elif browser == "edge":
-            driver = webdriver.Edge(desired_capabilities, dev_token, project_name, job_name, disabled_reports)
+            driver = webdriver.Edge(
+                edge_options=desired_capabilities,
+                token=dev_token,
+                projectname=project_name,
+                jobname=job_name,
+                disable_reports=disabled_reports)
         elif browser == "safari":
-            driver = webdriver.Safari(desired_capabilities, dev_token, project_name, job_name, disabled_reports)
+            driver = webdriver.Safari(
+                desired_capabilities=desired_capabilities,
+                token=dev_token,
+                projectname=project_name,
+                jobname=job_name,
+                disable_reports=disabled_reports)
         else:
             raise ValueError("Unsupported Browser, please look at the offical TestProject library documentation")
 
@@ -132,8 +157,6 @@ class TestProjectLibrary:
                 options = Options()
             elif browser == "safari":
                 options = DesiredCapabilities.SAFARI.copy()
-            else:
-                raise ValueError("Unsupported Browser, please look at the offical TestProject library documentation")
             for k, v in value.items():
                 options.set_capability(k, v)
         else:
@@ -151,8 +174,6 @@ class TestProjectLibrary:
                 options = Options()
             elif browser_name == "safari":
                 options = DesiredCapabilities.SAFARI.copy()
-            else:
-                raise ValueError("Unsupported Browser, please look at the offical TestProject library documentation")
             for k, v in caps.items():
                 options.set_capability(k, v)
         return options
