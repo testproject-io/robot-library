@@ -1,11 +1,12 @@
 *** Settings ***
 Library         TestProjectLibrary
+Library         String
 Suite Setup     Init
 Suite Teardown  Close
 *** Test Cases ***
 Set Session
     ${previous kw}=                 Register Keyword To Run On Failure      None
-    set selenium implicit wait      15
+    set selenium implicit wait      30 seconds
 
 Work On Actions
     Press Keys      //a[contains(text(), 'Actions')]
@@ -21,13 +22,15 @@ Navigate To TestProject
     Go To           https://testproject.io/
 
 Click On Addons And Search
-    Press Keys      //a[@title='Platform']
-    Press keys      //a[.='Addons']
-    Input Text      //input[@id='q']        Rest
-    Press Keys      //div[contains(text(), 'RESTful API Client')]
-    ${language}=    Get Text                //div[@class='addon-language']
-    Should Be Equal As Strings              ${language}     Java
-    Static Sleep
+    click element         //a[@id='cc-button']
+    Click Element         //a[@title='Platform']
+    Click Element         //a[.='Addons']
+    Click Element         //button[@aria-label='Close']
+    Input Text            //input[@id='q']        Rest
+    wait until element is visible  locator=//div[contains(text(), 'RESTful API Client')]    timeout=5s
+    Click Element         //div[contains(text(), 'RESTful API Client')]
+    ${language}=          Get Text                //div[@class='addon-language']
+    Should Be Equal As Strings                 ${language}     Java
 
 Random Actions
     Go To           https://www.google.com/
@@ -41,7 +44,7 @@ Random Actions
 
 *** Keywords ***
 Init
-    Init Testproject Driver     firefox    timeout=5000     url=https://tp-solutions.herokuapp.com/code
+    Init Testproject Driver     headlessfirefox     url=https://tp-solutions.herokuapp.com/code
 
 Close
     Close All Browsers
@@ -51,22 +54,9 @@ Equals
     Should Be Equal As Strings      ${x}    ${y}
 
 Handle New Window
-    ${title_var}        Get Window Titles
-    Select Window       title=${title_var}[1]
-    Close Window
-    @{windows_num} =    Get Window Titles
-    ${nWindows} =       Get Length  ${windows_num}
-    ${latest_window} =  Evaluate  ${nWindows}-1
-    Select Window       ${windows_num}[${latest_window}]
-
-Headless Chrome
-    ${chrome_options} =     Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
-    Call Method    ${chrome_options}    add_argument    headless
-    Call Method    ${chrome_options}    add_argument    disable-gpu
-    [Return]       ${chrome_options}
-
-Static Sleep
-    Sleep             3s
+    Switch Window                       locator=NEW
+    close window
+    Switch Window                       locator=MAIN
 
 
 *** Variables ***
