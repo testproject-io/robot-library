@@ -23,7 +23,7 @@ setuptools.setup(
     python_requires=">=3.6",
     install_requires=[
         "robotframework-seleniumlibrary>=4.5.0",
-        "testproject-python-sdk>=0.63.18",
+        "testproject-python-sdk>=0.63.19",
         "importlib-metadata>=1.7.0",
         "packaging>=20.4",
     ],
