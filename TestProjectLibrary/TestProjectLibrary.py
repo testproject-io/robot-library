@@ -141,7 +141,7 @@ class TestProjectLibrary:
     def _build_capabilities(self, caps, browser_name):
         options = None
         if caps:
-            key, value = caps.popitem()
+            _, value = caps.popitem()
             try:
                 browser = value["browserName"]
             except Exception as e:
