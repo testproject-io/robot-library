@@ -45,6 +45,7 @@ class TestProjectLibrary:
         self.__default_screenshot_name = f'TestProject-{datetime.date.today().strftime("%Y_%m_%d_%H_%M_%S")}.png'
         self.__reporter = None
         self.library = SeleniumLibrary()
+        os.environ["RFW_SUPPRESS_WARNINGS"] = "true"
 
     # TESTPROJECT #
     @keyword
@@ -124,19 +125,20 @@ class TestProjectLibrary:
                 jobname=job_name,
                 disable_reports=disabled_reports)
         else:
-            raise ValueError("Unsupported Browser, please look at the offical TestProject library documentation")
+            raise ValueError("Unsupported Browser, please look at the official TestProject library documentation")
 
         driver.report().disable_command_reports(True)
         driver.set_script_timeout(timeout)
         driver.report().step(message="Set timeout", description=f"Time out was set to {timeout}", passed=True)
         try:
             driver.get(url)
-            driver.report().step(message=f"Navigated to {url}", description=f"Succsefully navigated to {url}", passed=True)
+            driver.report().step(message=f"Navigated to {url}", description=f"Successfully navigated to {url}", passed=True)
         except Exception:
             driver.report().step(message=f"Failed to open {url}", description=f"Failed to open {url}", passed=True)
             raise
         self.library.register_driver(driver=driver, alias="testproject_driver")
         self.__reporter = driver.report()
+        self.__reporter.exclude_test_names(['run_cli', 'main'])
 
     def _build_capabilities(self, caps, browser_name):
         options = None
@@ -847,11 +849,11 @@ class TestProjectLibrary:
             )
 
         warnings.warn(
-            "This is deprecated using TestProject Library, please look at the offical documentation for examples.",
+            "This is deprecated using TestProject Library, please look at the official documentation for examples.",
             DeprecationWarning,
             stacklevel=2,
         )
-        logger.console("'Open Browser' is deprecated using TestProject Library, please see offical documentation.")
+        logger.console("'Open Browser' is deprecated using TestProject Library, please see official documentation.")
 
     @keyword
     def switch_browser(self, index_or_alias):
@@ -1044,7 +1046,6 @@ class TestProjectLibrary:
         if self.__reporter is None:
             return
 
-        if result.name != "run_cli":
-            self.__reporter.test(name=result.name, passed=result.passed)
+        self.__reporter.test(name=result.name, passed=result.passed)
 
     # LISTENERS END #
