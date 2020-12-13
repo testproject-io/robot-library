@@ -95,35 +95,40 @@ class TestProjectLibrary:
                 token=dev_token,
                 projectname=project_name,
                 jobname=job_name,
-                disable_reports=disabled_reports)
+                disable_reports=disabled_reports,
+            )
         elif browser in self.CHROME_NAMES:
             driver = webdriver.Chrome(
                 chrome_options=desired_capabilities,
                 token=dev_token,
                 projectname=project_name,
                 jobname=job_name,
-                disable_reports=disabled_reports)
+                disable_reports=disabled_reports,
+            )
         elif browser in self.IE_NAMES:
             driver = webdriver.Ie(
                 ie_options=desired_capabilities,
                 token=dev_token,
                 projectname=project_name,
                 jobname=job_name,
-                disable_reports=disabled_reports)
+                disable_reports=disabled_reports,
+            )
         elif browser == "edge":
             driver = webdriver.Edge(
                 edge_options=desired_capabilities,
                 token=dev_token,
                 projectname=project_name,
                 jobname=job_name,
-                disable_reports=disabled_reports)
+                disable_reports=disabled_reports,
+            )
         elif browser == "safari":
             driver = webdriver.Safari(
                 desired_capabilities=desired_capabilities,
                 token=dev_token,
                 projectname=project_name,
                 jobname=job_name,
-                disable_reports=disabled_reports)
+                disable_reports=disabled_reports,
+            )
         else:
             raise ValueError("Unsupported Browser, please look at the official TestProject library documentation")
 
@@ -138,7 +143,7 @@ class TestProjectLibrary:
             raise
         self.library.register_driver(driver=driver, alias="testproject_driver")
         self.__reporter = driver.report()
-        self.__reporter.exclude_test_names(['run_cli', 'main'])
+        self.__reporter.exclude_test_names(["run_cli", "main"])
 
     def _build_capabilities(self, caps, browser_name):
         options = None
@@ -604,63 +609,76 @@ class TestProjectLibrary:
     # WAITING #
     @keyword
     def wait_for_condition(self, condition, timeout=None, error=None):
-        self.base("", f"Condition: {condition} was met under {timeout} seconds", f"{condition}", condition, timeout, error)
+        message = self._set_message(timeout)
+        self.base("", f"Condition: '{condition}' was met {message}", f"{condition}", condition, timeout, error)
 
     @keyword
     def wait_until_location_is(self, expected, timeout=None, message=None):
-        self.base("", f"Location was {expected} under {timeout} seconds", f"{expected}", expected, timeout, message)
+        message = self._set_message(timeout)
+        self.base("", f"Location was '{expected}' {message}", f"{expected}", expected, timeout, message)
 
     @keyword
     def wait_until_location_is_not(self, location, timeout=None, message=None):
-        self.base("", f"Location was not {location} under {timeout} seconds", f"{location}", location, timeout, message)
+        message = self._set_message(timeout)
+        self.base("", f"Location was not '{location}' {message}", f"{location}", location, timeout, message)
 
     @keyword
     def wait_until_location_contains(self, expected, timeout=None, message=None):
-        self.base("", f"Location contained {expected} under {timeout} seconds", f"{expected}", expected, timeout, message)
+        message = self._set_message(timeout)
+        self.base("", f"Location contained '{expected}' {message}", f"{expected}", expected, timeout, message)
 
     @keyword
     def wait_until_location_does_not_contain(self, location, timeout=None, message=None):
-        self.base(
-            "", f"Location does not contain {location} under {timeout} seconds", f"{location}", location, timeout, message
-        )
+        message = self._set_message(timeout)
+        self.base("", f"Location does not contain '{location}' {message}", f"{location}", location, timeout, message)
 
     @keyword
     def wait_until_page_contains(self, text, timeout=None, error=None):
-        self.base("", f"Page contained {text} under {timeout} seconds", f" {text}", text, timeout, error)
+        message = self._set_message(timeout)
+        self.base("", f"Page contained '{text}' {message}", f" {text}", text, timeout, error)
 
     @keyword
     def wait_until_page_does_not_contain(self, text, timeout=None, error=None):
-        self.base("", f"Page does not contain {text} under {timeout} seconds", f" {text}", text, timeout, error)
+        message = self._set_message(timeout)
+        self.base("", f"Page does not contain '{text}' {message}", f" {text}", text, timeout, error)
 
     @keyword
     def wait_until_page_contains_element(self, locator, timeout=None, error=None, limit=None):
-        self.base(locator, f"Page contained {locator} under {timeout} seconds", f" {locator}", timeout, error, limit)
+        message = self._set_message(timeout)
+        self.base(locator, f"Page contained '{locator}' {message}", f" {locator}", timeout, error, limit)
 
     @keyword
     def wait_until_page_does_not_contain_element(self, locator, timeout=None, error=None, limit=None):
-        self.base(locator, f"Page does not contain {locator} under {timeout} seconds", f" {locator}", timeout, error, limit)
+        message = self._set_message(timeout)
+        self.base(locator, f"Page does not contain '{locator}' {message}", f" {locator}", timeout, error, limit)
 
     @keyword
     def wait_until_element_is_visible(self, locator, timeout=None, error=None):
-        self.base(locator, f"Element {locator} was visible under {timeout} seconds", f" {locator}", timeout, error)
+        message = self._set_message(timeout)
+        self.base(locator, f"Element '{locator}' was visible {message}", f" {locator}", timeout, error)
 
     @keyword
     def wait_until_element_is_not_visible(self, locator, timeout=None, error=None):
-        self.base(locator, f"Element {locator} was not visible under {timeout} seconds", f" {locator}", timeout, error)
+        message = self._set_message(timeout)
+        self.base(locator, f"Element '{locator}' was not visible {message}", f" {locator}", timeout, error)
 
     @keyword
     def wait_until_element_is_enabled(self, locator, timeout=None, error=None):
-        self.base(locator, f"Element {locator} was enabled under {timeout} seconds", f" {locator}", timeout, error)
+        message = self._set_message(timeout)
+        self.base(locator, f"Element '{locator}' was enabled {message}", f" {locator}", timeout, error)
 
     @keyword
     def wait_until_element_contains(self, locator, text, timeout=None, error=None):
-        self.base(locator, f"Element {locator} contained {text} under {timeout} seconds", f" {text}", text, timeout, error)
+        message = self._set_message(timeout)
+        self.base(locator, f"Element '{locator}' contained {text} {message}", f" {text}", text, timeout, error)
 
     @keyword
     def wait_until_element_does_not_contain(self, locator, text, timeout=None, error=None):
-        self.base(
-            locator, f"Element {locator} does not contain {text} under {timeout} seconds", f" {text}", text, timeout, error
-        )
+        message = self._set_message(timeout)
+        self.base(locator, f"Element '{locator}' does not contain {text} {message}", f" {text}", text, timeout, error)
+
+    def _set_message(self, timeout):
+        return "" if timeout is None else f"(timeout: {timeout} seconds)"
 
     # WAITING END #
 
@@ -933,15 +951,15 @@ class TestProjectLibrary:
 
     @keyword
     def set_selenium_speed(self, value):
-        return self.base("", f"Previous speed\nNew speed set to {value}", f"{value}", value)
+        return self.base("", f"Selenium Speed set to {value}", f"{value}", value)
 
     @keyword
     def set_selenium_timeout(self, value):
-        return self.base("", f"Previous timeout\nNew timeout set to {value}", f"{value}", value)
+        return self.base("", f"Timeout was set to {value}", f"{value}", value)
 
     @keyword
     def set_selenium_implicit_wait(self, value):
-        return self.base("", f"Previous implicit wait\nNew implicit wait set to {value}", f"{value}", value)
+        return self.base("", f"Implicit wait set to {value}", f"{value}", value)
 
     @keyword
     def set_browser_implicit_wait(self, value):
@@ -985,7 +1003,7 @@ class TestProjectLibrary:
             if not value:
                 self.base_report(True, message=message, func_name=func_name, description=description)
             else:
-                self.base_report(True, message=f" {message}: '{value}'", func_name=func_name, description=description)
+                self.base_report(True, message=f"Returned value: {value}", func_name=func_name, description=description)
             return value
         except Exception as e:
             self.base_report(success=False, exception=e, func_name=func_name, description=description)
@@ -1011,7 +1029,7 @@ class TestProjectLibrary:
         func_name = self.convert(func_name)
         if success:
             self.__reporter.step(
-                description=f"{func_name}: {description}", message=message, passed=True, screenshot=screenshot
+                description=f"{func_name}: {description}", message=message, passed=True, screenshot=True
             )
         else:
             if not message:
