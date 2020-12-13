@@ -272,3 +272,5 @@ The method is defined with the following arguments:
 1. `disable_reports` - If set to True, no reports will be generated and sent to the TestProject platform.
 1. `dev_token` - The development token, which by default is read from the environment variable `TP_DEV_TOKEN`.\
 you can get your token at: https://app.testproject.io/#/integrations/sdk.
+
+>You can set the driver to be a generic driver as well by passing "generic" in the browser argument.

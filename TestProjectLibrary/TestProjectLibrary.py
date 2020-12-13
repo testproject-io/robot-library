@@ -44,7 +44,8 @@ class TestProjectLibrary:
         self.ROBOT_LIBRARY_LISTENER = self
         self.__default_screenshot_name = f'TestProject-{datetime.date.today().strftime("%Y_%m_%d_%H_%M_%S")}.png'
         self.__reporter = None
-        self.library = SeleniumLibrary()
+        self.__library = SeleniumLibrary()
+        self.__is_generic = False
         os.environ["RFW_SUPPRESS_WARNINGS"] = "true"
 
     # TESTPROJECT #
@@ -129,19 +130,45 @@ class TestProjectLibrary:
                 jobname=job_name,
                 disable_reports=disabled_reports,
             )
+        elif browser == "generic":
+            driver = webdriver.Generic(
+                token=dev_token,
+                projectname=project_name,
+                jobname=job_name,
+                disable_reports=disabled_reports
+            )
+            self.__is_generic = True
         else:
             raise ValueError("Unsupported Browser, please look at the official TestProject library documentation")
 
-        driver.report().disable_command_reports(True)
-        driver.set_script_timeout(timeout)
-        driver.report().step(message="Set timeout", description=f"Time out was set to {timeout}", passed=True)
-        try:
-            driver.get(url)
-            driver.report().step(message=f"Navigated to {url}", description=f"Successfully navigated to {url}", passed=True)
-        except Exception:
-            driver.report().step(message=f"Failed to open {url}", description=f"Failed to open {url}", passed=True)
-            raise
-        self.library.register_driver(driver=driver, alias="testproject_driver")
+        # Set browser and timeout only if the driver is not generic
+        if not self.__is_generic:
+            driver.report().disable_command_reports(True)
+            driver.set_script_timeout(timeout)
+            driver.report().step(
+                message="Set timeout",
+                description=f"Time out was set to {timeout} millisecond",
+                passed=True
+            )
+            try:
+                driver.get(url)
+                driver.report().step(
+                    message=f"Navigated to {url}",
+                    description=f"Successfully navigated to {url}",
+                    passed=True
+                )
+            except Exception:
+                driver.report().step(message=f"Failed to open {url}", description=f"Failed to open {url}", passed=True)
+                raise
+            self.__library.register_driver(driver=driver, alias="testproject_driver")
+        else:
+            driver.report().step(
+                message="Generic Driver",
+                description="New session created",
+                passed=True,
+                screenshot=False
+            )
+
         self.__reporter = driver.report()
         self.__reporter.exclude_test_names(["run_cli", "main"])
 
@@ -988,6 +1015,17 @@ class TestProjectLibrary:
 
     # BROWSER MANAGEMENT END #
 
+    # GENERIC #
+    @keyword
+    def create_step(self, description, message, passed=True, screenshot=False):
+        self.__reporter.step(
+            message=message,
+            description=description,
+            passed=passed,
+            screenshot=False if self.__is_generic else screenshot
+        )
+    # GENERIC END#
+
     # UTIL METHODS #
     def base(self, *args):
         func_name = inspect.stack()[1].function
@@ -1042,17 +1080,17 @@ class TestProjectLibrary:
             if not func_name:  # Get name of calling Keyword
                 func_name = inspect.stack()[1].function
             if not locator and not values:
-                ret_value = self.library.run_keyword(func_name, (), {})
+                ret_value = self.__library.run_keyword(func_name, (), {})
             elif not locator:
-                ret_value = self.library.run_keyword(func_name, self.build_values(None, *values), {})
+                ret_value = self.__library.run_keyword(func_name, self.build_values(None, *values), {})
             elif not values:
                 if func_name == "get_webelements":
                     func_name = "Get WebElements"
                 if func_name == "get_webelement":
                     func_name = "Get WebElement"
-                ret_value = self.library.run_keyword(func_name, [locator], {})
+                ret_value = self.__library.run_keyword(func_name, [locator], {})
             else:
-                ret_value = self.library.run_keyword(func_name, self.build_values(locator, *values), {})
+                ret_value = self.__library.run_keyword(func_name, self.build_values(locator, *values), {})
             return ret_value
         except Exception as e:
             raise e
