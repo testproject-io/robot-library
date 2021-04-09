@@ -27,7 +27,7 @@ import os
 import inspect
 import warnings
 import datetime
-from typing import Optional, Union
+from typing import Optional
 
 
 class TestProjectLibrary:
@@ -57,7 +57,7 @@ class TestProjectLibrary:
         timeout: Optional[int] = 5000,
         project_name: Optional[str] = "TestProject Robot",
         job_name: Optional[str] = "Robot Job",
-        desired_capabilities: Union[str, dict, None] = None,
+        desired_capabilities=None,
         disabled_reports: Optional[bool] = False,
         dev_token: Optional[str] = os.getenv("TP_DEV_TOKEN"),
     ):
@@ -94,57 +94,56 @@ class TestProjectLibrary:
             driver = webdriver.Firefox(
                 firefox_options=desired_capabilities,
                 token=dev_token,
-                projectname=project_name,
-                jobname=job_name,
+                project_name=project_name,
+                job_name=job_name,
                 disable_reports=disabled_reports,
             )
         elif browser in self.CHROME_NAMES:
             driver = webdriver.Chrome(
                 chrome_options=desired_capabilities,
                 token=dev_token,
-                projectname=project_name,
-                jobname=job_name,
+                project_name=project_name,
+                job_name=job_name,
                 disable_reports=disabled_reports,
             )
         elif browser in self.IE_NAMES:
             driver = webdriver.Ie(
                 ie_options=desired_capabilities,
                 token=dev_token,
-                projectname=project_name,
-                jobname=job_name,
+                project_name=project_name,
+                job_name=job_name,
                 disable_reports=disabled_reports,
             )
         elif browser == "edge":
             driver = webdriver.Edge(
                 edge_options=desired_capabilities,
                 token=dev_token,
-                projectname=project_name,
-                jobname=job_name,
+                project_name=project_name,
+                job_name=job_name,
                 disable_reports=disabled_reports,
             )
         elif browser == "safari":
             driver = webdriver.Safari(
                 desired_capabilities=desired_capabilities,
                 token=dev_token,
-                projectname=project_name,
-                jobname=job_name,
+                project_name=project_name,
+                job_name=job_name,
                 disable_reports=disabled_reports,
             )
         elif browser == "generic":
             driver = webdriver.Generic(
                 token=dev_token,
-                projectname=project_name,
-                jobname=job_name,
+                project_name=project_name,
+                job_name=job_name,
                 disable_reports=disabled_reports
             )
             self.__is_generic = True
         else:
             raise ValueError("Unsupported Browser, please look at the official TestProject library documentation")
 
-        # Set browser and timeout only if the driver is not generic
+        # Set browser only if the driver is not generic
         if not self.__is_generic:
             driver.report().disable_command_reports(True)
-            driver.set_script_timeout(timeout)
             driver.report().step(
                 message="Set timeout",
                 description=f"Time out was set to {timeout} millisecond",
