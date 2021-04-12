@@ -57,7 +57,7 @@ Suite Setup InitTestProject
 
 *** Keywords ***
 InitTestProject
-    Init Testproject Driver     chrome      timeout=5000    job_name=TestProjectRobot
+    Init Testproject Driver     chrome      job_name=TestProjectRobot
     Open Browser https://example.testproject.io/web/
 ```
 
@@ -129,7 +129,7 @@ Submit Form
 *** Keywords ***
 Init Session
     ${options}=                 Headless Chrome
-    Init Testproject Driver     chrome    timeout=5000      job_name=TestProject Robot  url=https://example.testproject.io/web/     desired_capabilities=${options}
+    Init Testproject Driver     chrome      job_name=TestProject Robot  url=https://example.testproject.io/web/     desired_capabilities=${options}
 
 Close Session
     Close All Browsers
@@ -253,7 +253,6 @@ The method is defined with the following arguments:
             self,
             browser: str = "firefox",
             url: Optional[str] = None,
-            timeout: Optional[int] = 5000,
             project_name: Optional[str] = "TestProject Robot",
             job_name: Optional[str] = "Robot Job",
             desired_capabilities: Union[str, dict, None] = None,
@@ -264,7 +263,6 @@ The method is defined with the following arguments:
 
 1. 	`browser`: The name of the browser for the session.
 1.	`url`: The initial URL to navigate to.
-1.	`timeout`: - The Timeout of the selenium web driver to interact with elements.
 1.	`project_name`: The project name where the reports of the Jobs will show.
 1.	`job_name`: The job name which all the tests will appear under.
 1.	`desired_capabilities`: The capabilities to supply to the driver, for example to run on Headless chrome you can do the following:\
