@@ -23,7 +23,7 @@ Submit Form
 *** Keywords ***
 Init
     ${options}=     Headless Chrome
-    Init Testproject Driver     chrome    timeout=5000      job_name=TestProject Robot  url=https://example.testproject.io/web/     desired_capabilities=${options}
+    Init Testproject Driver     chrome      job_name=TestProject Robot  url=https://example.testproject.io/web/     desired_capabilities=${options}
 
 Close
     Close All Browsers
