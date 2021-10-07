@@ -19,18 +19,15 @@ Work On Actions
     END
 
 Navigate To TestProject
-    Go To           https://testproject.io/
+    Go To           https://example.testproject.io/
 
 Click On Addons And Search
-    click element         //a[@id='cc-button']
-    Click Element         //a[@title='Platform']
-    Click Element         //a[.='Addons']
-    Click Element         //button[@aria-label='Close']
-    Input Text            //input[@id='q']        Rest
-    wait until element is visible  locator=//div[contains(text(), 'RESTful API Client')]    timeout=5s
-    Click Element         //div[contains(text(), 'RESTful API Client')]
-    ${language}=          Get Text                //div[@class='addon-language']
-    Should Be Equal As Strings                 ${language}     Java
+    click element         //input[@id='name']
+    Input Text            //input[@id='name']        John Smith
+    click element         //input[@id='password']
+    Input Text            //input[@id='password']        12345
+    click element         //button[@id='login']
+    wait until element is visible  locator=//button[contains(text(), 'Logout')]    timeout=5s
 
 Random Actions
     Go To           https://www.google.com/
