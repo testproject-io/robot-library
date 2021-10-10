@@ -271,4 +271,17 @@ The method is defined with the following arguments:
 1. `dev_token` - The development token, which by default is read from the environment variable `TP_DEV_TOKEN`.\
 you can get your token at: https://app.testproject.io/#/integrations/sdk.
 
+## Running Tests using Cloud Browsers
+
+By default, TestProject Agent communicates with the local Selenium or Appium server.
+In order to initialize a remote driver for cloud providers such as SauceLabs or BrowserStack,
+a custom capability cloud:URL should be set when initializing the TestProject driver:
+
+```python
+Init
+    ${remoteUrl}                Set Variable        http://${browserstack_userName}:${browserstack_accessKey}@hub-cloud.browserstack.com/wd/hub
+    ${desiredCapabilities}      Create Dictionary   os=${os}     os_version=${osVersion}     browserName=${browser}   browser_version=${browserVersion}     cloud:URL=${remoteUrl}
+    Init Testproject Driver     chrome     url=https://tp-solutions.herokuapp.com/code      desired_capabilities=${desiredCapabilities}
+```
+
 >You can set the driver to be a generic driver as well by passing "generic" in the browser argument.
